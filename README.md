@@ -3,6 +3,11 @@
 Allows you to send class Runnable files via the socket, load them into the CloassLoader and have it executed on the server side.  
 So you can debug an application [remotely] without restarting it.
 
+/!\\ This project allow remote code execution, if you are not aware 
+of the security risk of this library you should not use it /!\\
+
+**None of the Authors are responsible for any damage caused by the misuse of this library**
+
 My Discord: ``Matteow#6953``
 
 ## :fire: Benefits ?
@@ -10,7 +15,7 @@ My Discord: ``Matteow#6953``
 * Very light (5Kb only).
 * very fast to the human eye.
 * Can receive several client at the same time.
-* Each client has its own thread.
+* Each client has its own threads.
 * Execution errors are caught and displayed.
 
 ## :question: How it works ?
@@ -31,7 +36,7 @@ new Thread(() -> {
         
         DynamicServer server = new DynamicServer( new ServerSocket( PORT ) );
         // with a ServerSocket object
-        
+        server.listen();
         
         server.close();
         // close the server and disconnect clients.
@@ -54,9 +59,10 @@ final DynamicClient client = new DynamicClient( new Socket() );
 ```java
 client.sendRunnable(OneClass.class);
 // send a Class<? extends Runnable>
+Runnable runnable = client.sendFile( new File("path_to_your_class"), "your.class.Name");
 
-client.sendFile( new File("path_to_your_class") );
-
+// Exec runnable
+runnable.run();
 
 client.close(); 
 // close the client and its socket
