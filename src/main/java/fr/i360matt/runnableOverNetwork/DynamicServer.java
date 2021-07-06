@@ -5,7 +5,7 @@ import java.net.*;
 
 public class DynamicServer implements Closeable {
 
-    final ServerSocket server;
+    private final ServerSocket server;
     public DynamicServer (int port) throws IOException {
         server = new ServerSocket(port);
         while (!server.isClosed()) {
@@ -69,7 +69,7 @@ public class DynamicServer implements Closeable {
     }
 
 
-    public void execRunnable (final File dir, final File file) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private void execRunnable (final File dir, final File file) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         final URLClassLoader classLoader = new URLClassLoader(new URL[]{dir.toURI().toURL()});
         // Load the class from the classloader by name....
         final  Class<?> loadedClass = classLoader.loadClass(file.getName().replace(".class", ""));
