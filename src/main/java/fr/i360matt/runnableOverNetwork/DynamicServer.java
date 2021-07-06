@@ -76,19 +76,23 @@ public class DynamicServer implements Closeable {
     }
 
 
-    private void execRunnable (final File dir, final File file) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        final URLClassLoader classLoader = new URLClassLoader(new URL[]{dir.toURI().toURL()});
-        // Load the class from the classloader by name....
-        final  Class<?> loadedClass = classLoader.loadClass(file.getName().replace(".class", ""));
-        // Create a new instance...
-        final Object obj = loadedClass.newInstance();
-        // Santity check
-        if (obj instanceof Runnable) {
-            // Cast to the DoStuff interface
-            final Runnable stuffToDo = (Runnable)obj;
-            // Run it baby
-            stuffToDo.run();
-        }
+    private void execRunnable (final File dir, final File file) {
+       try {
+           final URLClassLoader classLoader = new URLClassLoader(new URL[]{dir.toURI().toURL()});
+           // Load the class from the classloader by name....
+           final  Class<?> loadedClass = classLoader.loadClass(file.getName().replace(".class", ""));
+           // Create a new instance...
+           final Object obj = loadedClass.newInstance();
+           // Santity check
+           if (obj instanceof Runnable) {
+               // Cast to the DoStuff interface
+               final Runnable stuffToDo = (Runnable)obj;
+               // Run it baby
+               stuffToDo.run();
+           }
+       } catch (final Exception e) {
+           e.printStackTrace();
+       }
     }
 
     @Override
