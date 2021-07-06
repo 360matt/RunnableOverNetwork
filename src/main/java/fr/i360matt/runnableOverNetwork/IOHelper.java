@@ -24,16 +24,18 @@ public class IOHelper {
      * Work around a bug in the JVM when reading large amount of data
      * @author Fox2Code
      */
-    public static void readLarge(InputStream inputStream,byte[] bytes) throws IOException {
+    public static int readLarge(InputStream inputStream,byte[] bytes) throws IOException {
+        int read = 0;
         if (bytes.length < 0x8FFF) {
-            inputStream.read(bytes);
+            read += inputStream.read(bytes);
         } else {
             int i = 0;
             while (i < bytes.length) {
-                inputStream.read(bytes, i, Math.min(0x8FFF, bytes.length-i));
+                read += inputStream.read(bytes, i, Math.min(0x8FFF, bytes.length-i));
                 i+=0x8FFF;
             }
         }
+        return read;
     }
 
     /**
@@ -55,6 +57,6 @@ public class IOHelper {
         for (int i = 0; i < l; i++) {
             chars[i] = dataInput.readChar();
         }
-        return new String(chars);
+        return String.valueOf(chars);
     }
 }
