@@ -16,24 +16,24 @@ public class DynamicClassLoader extends SecureClassLoader {
     private final ConcurrentHashMap<String, Object> rawInstances;
     private final CodeSource codeSource;
 
-    public DynamicClassLoader(boolean isolated) {
+    public DynamicClassLoader(final boolean isolated) {
         super(isolated ? null : DynamicClassLoader.class.getClassLoader());
         this.rawClasses = new ConcurrentHashMap<>();
         this.rawInstances = new ConcurrentHashMap<>();
         this.codeSource = new CodeSource(null, new CodeSigner[0]);
     }
 
-    public void putClass(String className, byte[] classData) {
+    public void putClass(final String className, final byte[] classData) {
         this.rawClasses.put(className, classData);
     }
 
-    public boolean hasClass(String className) {
+    public boolean hasClass(final String className) {
         return this.rawClasses.containsKey(className);
     }
 
     @Override
-    public InputStream getResourceAsStream(String name) {
-        byte[] cl;
+    public InputStream getResourceAsStream(final String name) {
+        final byte[] cl;
         if (name.endsWith(".class") && (cl = rawClasses.get(
                 name.substring(0, name.length() - 6).replace('/', '.'))) != null) {
             return new ByteArrayInputStream(cl);
@@ -44,11 +44,11 @@ public class DynamicClassLoader extends SecureClassLoader {
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         name = name.replace('/', '.');
-        byte[] cl;
+        final byte[] cl;
         if ((cl = rawClasses.get(name.replace('/', '.'))) != null) {
-            int index = name.lastIndexOf('.');
+            final int index = name.lastIndexOf('.');
             if (index != -1) {
-                String pkg = name.substring(0, index);
+                final String pkg = name.substring(0, index);
                 if (this.getPackage(pkg) == null) {
                     this.definePackage(pkg, null, null, null, null, null, null, null);
                 }
@@ -58,11 +58,11 @@ public class DynamicClassLoader extends SecureClassLoader {
         throw new ClassNotFoundException(name);
     }
 
-    public Object loadInstance(String name) throws ReflectiveOperationException {
+    public Object loadInstance(final String name) {
         return this.rawInstances.computeIfAbsent(name, n -> {
             try {
                 return findClass(n).newInstance();
-            } catch (ReflectiveOperationException e) {
+            } catch (final ReflectiveOperationException e) {
                 IOHelper.sneakyThrow(e);
                 return null;
             }

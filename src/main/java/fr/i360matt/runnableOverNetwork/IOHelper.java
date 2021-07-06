@@ -4,13 +4,13 @@ import java.io.*;
 
 public class IOHelper {
     @SuppressWarnings("unchecked")
-    public static <E extends Throwable> void sneakyThrow(Throwable e) throws E {
+    public static <E extends Throwable> void sneakyThrow (final Throwable e) throws E {
         throw (E) e;
     }
 
-    public static byte[] readAllBytes(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] buffer = new byte[4096];
+    public static byte[] readAllBytes (final InputStream inputStream) throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        final byte[] buffer = new byte[4096];
         int nRead;
         baos.reset();
         while ((nRead = inputStream.read(buffer, 0, buffer.length)) != -1) {
@@ -24,7 +24,7 @@ public class IOHelper {
      * Work around a bug in the JVM when reading large amount of data
      * @author Fox2Code
      */
-    public static int readLarge(InputStream inputStream,byte[] bytes) throws IOException {
+    public static int readLarge (final InputStream inputStream, final byte[] bytes) throws IOException {
         int read = 0;
         if (bytes.length < 0x8FFF) {
             read += inputStream.read(bytes);
@@ -42,7 +42,7 @@ public class IOHelper {
      * Safe way to write String
      * @author Fox2Code
      */
-    public static void writeString(DataOutput dataOutput, String str) throws IOException {
+    public static void writeString (final DataOutput dataOutput, final String str) throws IOException {
         dataOutput.writeByte(str.length());
         dataOutput.writeChars(str);
     }
@@ -51,9 +51,9 @@ public class IOHelper {
      * Safe way to read String
      * @author Fox2Code
      */
-    public static String readString(DataInput dataInput) throws IOException {
-        int l = dataInput.readUnsignedByte();
-        char[] chars = new char[l];
+    public static String readString (final DataInput dataInput) throws IOException {
+        final int l = dataInput.readUnsignedByte();
+        final char[] chars = new char[l];
         for (int i = 0; i < l; i++) {
             chars[i] = dataInput.readChar();
         }

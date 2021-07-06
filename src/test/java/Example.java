@@ -8,7 +8,7 @@ public class Example {
 
     public static void main (final String[] args) throws IOException {
         System.out.println("Start");
-        DynamicServer dynamicServer = new DynamicServer(5000, "password");
+        final DynamicServer dynamicServer = new DynamicServer(5000, "password");
         /* For the test to show meaningfull result we need to .setIsolated(true)
         Because without it it would get the class from this class loader
         * */
@@ -17,7 +17,7 @@ public class Example {
         new Thread(() -> {
             try {
                 dynamicServer.listen();
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
         }).start();

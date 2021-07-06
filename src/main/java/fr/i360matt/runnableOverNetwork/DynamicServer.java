@@ -3,7 +3,7 @@ package fr.i360matt.runnableOverNetwork;
 import java.io.*;
 import java.net.*;
 
-public class DynamicServer implements Closeable,ConnectionConstants {
+public class DynamicServer implements Closeable, ConnectionConstants {
 
     private final ServerSocket server;
     private final String password;
@@ -11,7 +11,7 @@ public class DynamicServer implements Closeable,ConnectionConstants {
     private boolean isolated = false;
     private boolean allowRemoteClose = false;
 
-    public DynamicServer (int port, final String password) throws IOException {
+    public DynamicServer (final int port, final String password) throws IOException {
         this.server = new ServerSocket(port);
         this.password = password;
     }
@@ -20,23 +20,22 @@ public class DynamicServer implements Closeable,ConnectionConstants {
         this.server = server;
         this.password = password;
         while (!server.isClosed()) {
-            Socket clientSock = server.accept();
+            final Socket clientSock = server.accept();
             hasNewClient(clientSock);
         }
     }
 
-    public void listen() throws IOException {
+    public void listen () throws IOException {
         while (!server.isClosed()) {
-            Socket clientSock;
             try {
-                clientSock = server.accept();
-            } catch (IOException ioe) {
-                if ("Socket closed".equals(ioe.getMessage()))
+                final Socket clientSock = server.accept();
+                clientSock.setTcpNoDelay(true);
+                hasNewClient(clientSock);
+            } catch (final IOException ioe) {
+                if ("socket closed".equals(ioe.getMessage()))
                     return; // Happen on close, this is not an error
                 throw ioe;
             }
-            clientSock.setTcpNoDelay(true);
-            hasNewClient(clientSock);
         }
     }
 
@@ -56,7 +55,7 @@ public class DynamicServer implements Closeable,ConnectionConstants {
                 final DynamicClassLoader dynamicClassLoader = new DynamicClassLoader(isolated);
 
                 while (!this.server.isClosed() && !clientSock.isClosed()) {
-                    int code = receiver.readInt();
+                    final int code = receiver.readInt();
                     switch (code) {
                         case ID_KEEP_ALIVE:
                             break;
@@ -72,9 +71,9 @@ public class DynamicServer implements Closeable,ConnectionConstants {
                             break;
                         case ID_SEND_EXEC_DATA:
                         case ID_SEND_DATA: {
-                            int filesize = receiver.readInt(); // Send file size in separate msg
-                            String className = IOHelper.readString(receiver);
-                            byte[] buffer = new byte[filesize];
+                            final int filesize = receiver.readInt(); // Send file size in separate msg
+                            final String className = IOHelper.readString(receiver);
+                            final byte[] buffer = new byte[filesize];
                             IOHelper.readLarge(receiver, buffer);
 
                             dynamicClassLoader.putClass(className, buffer);
@@ -85,7 +84,7 @@ public class DynamicServer implements Closeable,ConnectionConstants {
                         }
                         case ID_EXEC_DATA:
                         case ID_EXEC_CLASS:
-                            String className = IOHelper.readString(receiver);
+                            final String className = IOHelper.readString(receiver);
                             if (code == ID_EXEC_DATA) {
                                 if (!dynamicClassLoader.hasClass(className)) {
                                     sender.writeByte(1);
@@ -105,18 +104,18 @@ public class DynamicServer implements Closeable,ConnectionConstants {
             } catch (final Exception ignored) {
                 try {
                     clientSock.close();
-                } catch (IOException ignored1) { }
+                } catch (final IOException ignored1) { }
             }
         }).start();
     }
 
 
-    private void execRunnable (final DynamicClassLoader classLoader, final String className,boolean forceNew) {
+    private void execRunnable (final DynamicClassLoader classLoader, final String className, final boolean forceNew) {
        try {
            final Object obj;
            if (forceNew) {
                // Load the class from the classloader by name....
-               final  Class<?> loadedClass = classLoader.loadClass(className);
+               final Class<?> loadedClass = classLoader.loadClass(className);
                // Create a new instance...
                obj = loadedClass.newInstance();
            } else {
@@ -135,15 +134,15 @@ public class DynamicServer implements Closeable,ConnectionConstants {
        }
     }
 
-    public void setLogErrors(boolean logErrors) {
+    public void setLogErrors (final boolean logErrors) {
         this.logErrors = logErrors;
     }
 
-    public void setIsolated(boolean isolated) {
+    public void setIsolated (final boolean isolated) {
         this.isolated = isolated;
     }
 
-    public void setAllowRemoteClose(boolean allowRemoteClose) {
+    public void setAllowRemoteClose (final boolean allowRemoteClose) {
         this.allowRemoteClose = allowRemoteClose;
     }
 
@@ -152,7 +151,7 @@ public class DynamicServer implements Closeable,ConnectionConstants {
         this.server.close();
     }
 
-    public boolean isClosed() {
+    public boolean isClosed () {
         return server == null || server.isClosed();
     }
 }
