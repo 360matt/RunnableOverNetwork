@@ -6,6 +6,7 @@ So you can debug an application [remotely] without restarting it.
 My Discord: ``Matteow#6953``
 
 ## :fire: Benefits ?
+* No need to relaunch your .jar
 * Very light (5Kb only).
 * very fast to the human eye.
 * Can receive several client at the same time.
