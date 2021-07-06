@@ -6,16 +6,20 @@ import java.net.*;
 public class DynamicServer implements Closeable {
 
     private final ServerSocket server;
-    public DynamicServer (int port) throws IOException {
-        server = new ServerSocket(port);
+    private final String password;
+
+    public DynamicServer (int port, final String password) throws IOException {
+        this.server = new ServerSocket(port);
+        this.password = password;
         while (!server.isClosed()) {
             Socket clientSock = server.accept();
             hasNewClient(clientSock);
         }
     }
 
-    public DynamicServer (final ServerSocket server) throws IOException {
+    public DynamicServer (final ServerSocket server, final String password) throws IOException {
         this.server = server;
+        this.password = password;
         while (!server.isClosed()) {
             Socket clientSock = server.accept();
             hasNewClient(clientSock);
@@ -25,11 +29,14 @@ public class DynamicServer implements Closeable {
     private void hasNewClient (final Socket clientSock)  {
         new Thread(() -> {
             try {
-                final DataInputStream dis = new DataInputStream(clientSock.getInputStream());
+                final DataInputStream receiver = new DataInputStream(clientSock.getInputStream());
+                if (!receiver.readUTF().equals(this.password)) {
+                    return;
+                }
 
                 while (!this.server.isClosed() && !clientSock.isClosed()) {
 
-                    int filesize = dis.readInt(); // Send file size in separate msg
+                    int filesize = receiver.readInt(); // Send file size in separate msg
                     if (filesize == 0)
                         continue;
 
@@ -44,11 +51,11 @@ public class DynamicServer implements Closeable {
                         dir.mkdir();
                     }
 
-                    final File file = new File(dir, dis.readUTF());
+                    final File file = new File(dir, receiver.readUTF());
                     final FileOutputStream fos = new FileOutputStream(file);
 
                     byte[] buffer = new byte[filesize];
-                    while((read = dis.read(buffer, 0, Math.min(buffer.length, remaining))) > 0) {
+                    while((read = receiver.read(buffer, 0, Math.min(buffer.length, remaining))) > 0) {
                         totalRead += read;
                         remaining -= read;
                         System.out.println("read " + totalRead + " bytes.");

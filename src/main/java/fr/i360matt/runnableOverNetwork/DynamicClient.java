@@ -8,13 +8,15 @@ public class DynamicClient implements Closeable {
 
     private final DataOutputStream dos;
 
-    public DynamicClient (String host, int port) throws IOException {
+    public DynamicClient (String host, int port, final String password) throws IOException {
         final Socket socket = new Socket(host, port);
         this.dos = new DataOutputStream(socket.getOutputStream());
+        this.dos.writeUTF(password);
     }
 
-    public DynamicClient (final Socket socket) throws IOException {
+    public DynamicClient (final Socket socket, final String password) throws IOException {
         this.dos = new DataOutputStream(socket.getOutputStream());
+        this.dos.writeUTF(password);
     }
 
     public void sendRunnable (final Class<? extends Runnable> clazz) throws IOException {
