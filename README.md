@@ -12,7 +12,7 @@ My Discord: ``Matteow#6953``
 
 ## :fire: Benefits ?
 * No need to relaunch your .jar
-* Very light (5Kb only).
+* Very light (12Kb only).
 * very fast to the human eye.
 * Can receive several client at the same time.
 * Each client has its own threads.
