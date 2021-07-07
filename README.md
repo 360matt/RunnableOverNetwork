@@ -31,10 +31,10 @@ You must instantiate your server in a thread so as not to block the rest of your
 ```java
 new Thread(() -> {
     try {
-        DynamicServer server = new DynamicServer( PORT );
+        DynamicServer server = new DynamicServer( PORT, PASSWORD );
         // with port
         
-        DynamicServer server = new DynamicServer( new ServerSocket( PORT ) );
+        DynamicServer server = new DynamicServer( new ServerSocket( PORT ), PASSWORD );
         // with a ServerSocket object
         server.listen();
         
@@ -50,9 +50,9 @@ new Thread(() -> {
 The client, most of the time will run locally, launched by your IDE (and your class-test)  
 ### Instantiate:
 ```java
-final DynamicClient client = new DynamicClient(ip, port);
+final DynamicClient client = new DynamicClient( IP, PORT, PASSWORD);
 
-final DynamicClient client = new DynamicClient( new Socket() );
+final DynamicClient client = new DynamicClient( new Socket(), PASSWORD );
 ```
 
 ### Use
