@@ -11,12 +11,14 @@ of the security risk of this library you should not use it /!\\
 My Discord: ``Matteow#6953``
 
 ## :fire: Benefits ?
+* Easy to use
 * No need to relaunch your .jar
-* Very light (12Kb only).
+* Very light (27Kb only).
 * very fast to the human eye.
-* Can receive several client at the same time.
+* Can receive several clients at the same time.
 * Each client has its own threads.
 * Execution errors are caught and displayed.
+* Support both data sending and retrieval
 
 ## :question: How it works ?
 1. Your IDE has already compiled your classes before launching the client.
@@ -26,7 +28,18 @@ My Discord: ``Matteow#6953``
   
 # How to use ?
 ## Create server:
-You must instantiate your server in a thread so as not to block the rest of your program.   
+```java
+final DynamicServer dynamicServer = new DynamicServer(5000, "password");
+// Set to true to make function able to send/receive complex Objects
+dynamicServer.setAllowUnsafeSerialisation(true);
+new Thread(() -> {
+    try {
+        dynamicServer.listen(); // This method is blocking
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}).start();
+```
 ### Instantiate & Use:
 ```java
 new Thread(() -> {
@@ -50,14 +63,15 @@ new Thread(() -> {
 The client, most of the time will run locally, launched by your IDE (and your class-test)  
 ### Instantiate:
 ```java
-final DynamicClient client = new DynamicClient( IP, PORT, PASSWORD);
+final DynamicClient client = new DynamicClient( IP, PORT, USERNAME, PASSWORD);
 
-final DynamicClient client = new DynamicClient( new Socket(), PASSWORD );
+final DynamicClient client = new DynamicClient( new Socket(), USERNAME, PASSWORD );
 ```
+Note: The username can be empty.
 
 ### Use
 ```java
-client.sendRunnable(OneClass.class);
+client.sendRunnable(OneClass.class).run();
 // send a Class<? extends Runnable>
 Runnable runnable = client.sendFile( new File("path_to_your_class"), "your.class.Name");
 

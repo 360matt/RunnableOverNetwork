@@ -14,6 +14,7 @@ public class Example {
         * */
         dynamicServer.setIsolated(true);
         dynamicServer.setAllowRemoteClose(true); // For testing
+        // dynamicServer.setAllowUnsafeSerialisation(true);
         new Thread(() -> {
             try {
                 dynamicServer.listen();
@@ -22,13 +23,16 @@ public class Example {
             }
         }).start();
 
-        final DynamicClient client = new DynamicClient("127.0.0.1", 5000, "password");
+        final DynamicClient client = new DynamicClient("127.0.0.1", 5000, "username", "password");
 
         client.execRunnable(TimerClass.class);
         client.execRunnable(LogInfoClass.class);
         client.execRunnable(OneClass.class);
+        client.sendConsumer(LogConsumer.class).accept("Hello my friend form the other side");
+        System.out.println("Remote JVM version: " + client.sendFunction(FunctionClass.class).apply("java.version"));
         client.execRunnable(TimerClass.class);
 
         client.remoteCloseServer();
+        System.out.println("End");
     }
 }
