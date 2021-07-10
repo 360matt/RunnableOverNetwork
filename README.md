@@ -3,8 +3,9 @@
 Allows you to send class Runnable files via the socket, load them into the CloassLoader and have it executed on the server side.  
 So you can debug an application [remotely] without restarting it.
 
-/!\\ This project allow remote code execution, if you are not aware 
-of the security risk of this library you should not use it /!\\
+⚠️ This project allow remote code execution, if you are not aware 
+of the security risk of this library you should not use it.  
+⚠️ This code enables Remote Code Execution (RCE).
 
 **None of the Authors are responsible for any damage caused by the misuse of this library**
 
