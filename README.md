@@ -16,7 +16,7 @@ My Discord: ``Matteow#6953``
 <dependency>
     <groupId>io.github.360matt</groupId>
     <artifactId>RunnableOverNetwork</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
 
