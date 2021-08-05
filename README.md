@@ -11,6 +11,15 @@ of the security risk of this library you should not use it.
 
 My Discord: ``Matteow#6953``
 
+## Maven
+```
+<dependency>
+    <groupId>io.github.360matt</groupId>
+    <artifactId>RunnableOverNetwork</artifactId>
+    <version>2.0-SNAPSHOT</version>
+</dependency>
+```
+
 ## :fire: Benefits ?
 * Easy to use
 * No need to relaunch your .jar
