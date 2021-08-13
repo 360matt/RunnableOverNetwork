@@ -44,11 +44,14 @@ My Discord: ``Matteow#6953``
 4. It checks the type of class and instantiates the Runnable.
   
 # How to use ?
-## Create server:
+### Instantiate & Use:
 ```java
 final DynamicServer dynamicServer = new DynamicServer(5000, "password");
+final DynamicServer dynamicServer = new DynamicServer( new ServerSocket( PORT ), PASSWORD );
+
 // Set to true to make function able to send/receive complex Objects
 dynamicServer.setAllowUnsafeSerialisation(true);
+
 new Thread(() -> {
     try {
         dynamicServer.listen(); // This method is blocking
@@ -56,24 +59,9 @@ new Thread(() -> {
         e.printStackTrace();
     }
 }).start();
-```
-### Instantiate & Use:
-```java
-new Thread(() -> {
-    try {
-        DynamicServer server = new DynamicServer( PORT, PASSWORD );
-        // with port
-        
-        DynamicServer server = new DynamicServer( new ServerSocket( PORT ), PASSWORD );
-        // with a ServerSocket object
-        server.listen();
-        
-        server.close();
-        // close the server and disconnect clients.
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}).start();
+
+server.close();
+// close the server and disconnect clients.
 ```
 
 ## Create client:
