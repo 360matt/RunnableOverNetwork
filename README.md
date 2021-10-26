@@ -13,12 +13,10 @@ My Discord: ``Matteow#6953``
 
 ## Maven
 ```
-<repositories>
-    <repository>
-        <id>bungeecord-repo</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </repository>
-</repositories>
+<repository>
+    <id>sonatype</id>
+    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+</repository>
 
 <dependency>
     <groupId>io.github.360matt</groupId>
