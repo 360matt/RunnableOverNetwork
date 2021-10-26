@@ -10,6 +10,21 @@ of the security risk of this library you should not use it /!\\
 
 My Discord: ``Matteow#6953``
 
+## Maven
+```
+<repositories>
+    <repository>
+        <id>sonatype</id>
+        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+</repositories>
+<dependency>
+    <groupId>io.github.360matt</groupId>
+    <artifactId>RunnableOverNetwork</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
+```
+
 ## :fire: Benefits ?
 * Easy to use
 * No need to relaunch your .jar
