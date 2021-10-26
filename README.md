@@ -3,8 +3,9 @@
 Allows you to send class Runnable files via the socket, load them into the CloassLoader and have it executed on the server side.  
 So you can debug an application [remotely] without restarting it.
 
-/!\\ This project allow remote code execution, if you are not aware 
-of the security risk of this library you should not use it /!\\
+⚠️ This project allow remote code execution, if you are not aware 
+of the security risk of this library you should not use it.  
+⚠️ This code enables Remote Code Execution (RCE).
 
 **None of the Authors are responsible for any damage caused by the misuse of this library**
 
@@ -14,10 +15,11 @@ My Discord: ``Matteow#6953``
 ```
 <repositories>
     <repository>
-        <id>sonatype</id>
-        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        <id>bungeecord-repo</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
 </repositories>
+
 <dependency>
     <groupId>io.github.360matt</groupId>
     <artifactId>RunnableOverNetwork</artifactId>
@@ -42,11 +44,14 @@ My Discord: ``Matteow#6953``
 4. It checks the type of class and instantiates the Runnable.
   
 # How to use ?
-## Create server:
+### Instantiate & Use:
 ```java
 final DynamicServer dynamicServer = new DynamicServer(5000, "password");
+final DynamicServer dynamicServer = new DynamicServer( new ServerSocket( PORT ), PASSWORD );
+
 // Set to true to make function able to send/receive complex Objects
 dynamicServer.setAllowUnsafeSerialisation(true);
+
 new Thread(() -> {
     try {
         dynamicServer.listen(); // This method is blocking
@@ -54,24 +59,9 @@ new Thread(() -> {
         e.printStackTrace();
     }
 }).start();
-```
-### Instantiate & Use:
-```java
-new Thread(() -> {
-    try {
-        DynamicServer server = new DynamicServer( PORT, PASSWORD );
-        // with port
-        
-        DynamicServer server = new DynamicServer( new ServerSocket( PORT ), PASSWORD );
-        // with a ServerSocket object
-        server.listen();
-        
-        server.close();
-        // close the server and disconnect clients.
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}).start();
+
+server.close();
+// close the server and disconnect clients.
 ```
 
 ## Create client:
