@@ -9,7 +9,7 @@ of the security risk of this library you should not use it.
 
 **None of the Authors are responsible for any damage caused by the misuse of this library**
 
-My Discord: ``Matteow#6953``
+My Discord: ``yalow_``
 
 ## Maven
 ```
